@@ -1,4 +1,4 @@
-mod vec3;
+// use raycaster;
 use raylib::prelude::*;
 
 fn main() {

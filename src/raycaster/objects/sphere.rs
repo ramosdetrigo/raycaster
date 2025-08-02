@@ -1,8 +1,8 @@
 use crate::raycaster::{Intersection, Material, Ray};
-use nalgebra::{UnitVector3, Vector3};
+use glam::DVec3;
 
 pub struct Sphere {
-    pub pos: Vector3<f64>,
+    pub pos: DVec3,
     pub radius: f64,
     pub material: Material,
 }
@@ -17,9 +17,9 @@ impl Sphere {
         // origin-to-center
         let oc = ray.p0 - self.pos;
 
-        let a = ray.dr.magnitude_squared();
-        let b = 2.0 * ray.dr.dot(&oc);
-        let c = oc.magnitude_squared() - self.radius * self.radius;
+        let a = ray.dr.length_squared();
+        let b = 2.0 * ray.dr.dot(oc);
+        let c = oc.length_squared() - self.radius * self.radius;
         let delta = b * b - 4.0 * a * c;
 
         if delta >= 0.0 {
@@ -34,7 +34,7 @@ impl Sphere {
                 .min_by(|t1, t2| t1.total_cmp(t2))
                 .map(|t| {
                     let p = ray.at(t);
-                    let n = UnitVector3::new_normalize(p - self.pos);
+                    let n = (p - self.pos).normalize();
                     Intersection {
                         t: t,
                         p: p,
