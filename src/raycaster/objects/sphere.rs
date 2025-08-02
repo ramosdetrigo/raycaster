@@ -8,6 +8,14 @@ pub struct Sphere {
 }
 
 impl Sphere {
+    pub fn new(pos: DVec3, radius: f64, material: Material) -> Sphere {
+        Sphere {
+            pos,
+            radius,
+            material,
+        }
+    }
+
     /// Retorna a interseção de um raio com uma esfera (None se não há interseção)
     pub fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         // resolvemos a equação do segundo grau |R(t) - C| = r

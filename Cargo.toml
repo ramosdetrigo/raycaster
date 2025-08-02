@@ -6,4 +6,5 @@ edition = "2024"
 [dependencies]
 glam = "0.30.5"
 raylib = "5.5.1"
+rayon = "1.10.0"
 
