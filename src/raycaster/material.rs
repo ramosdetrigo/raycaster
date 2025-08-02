@@ -20,4 +20,8 @@ impl Material {
         k_esp: DVec3 { x: 1.0, y: 1.0, z: 1.0 },
         e: 5.0,
     };
+
+    pub fn new(k_amb: DVec3, k_dif: DVec3, k_esp: DVec3, e: f64) -> Material {
+        Material { k_amb, k_dif, k_esp, e }
+    }
 }

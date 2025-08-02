@@ -1,7 +1,9 @@
+pub mod objects;
+pub mod lights;
+
 mod camera;
 mod intersection;
 mod material;
-pub mod objects;
 mod ray;
 mod scene;
 

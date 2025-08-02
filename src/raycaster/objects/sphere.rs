@@ -1,4 +1,7 @@
-use crate::raycaster::{Intersection, Material, Ray};
+use crate::{
+    objects::Object,
+    raycaster::{Intersection, Material, Ray},
+};
 use glam::DVec3;
 
 pub struct Sphere {
@@ -48,10 +51,17 @@ impl Sphere {
                         p: p,
                         normal: n,
                         material: self.material,
+                        object: self
                     }
                 })
         } else {
             None
         }
+    }
+}
+
+impl Object for Sphere {
+    fn intersects(&self, ray: &Ray) -> Option<Intersection> {
+        self.intersects(ray)
     }
 }
