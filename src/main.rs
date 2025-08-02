@@ -1,3 +1,4 @@
+mod vec3;
 use raylib::prelude::*;
 
 fn main() {
@@ -13,7 +14,5 @@ fn main() {
         d.clear_background(Color::WHITE);
         d.draw_texture(&texture, 256, 0, Color::WHITE);
         d.draw_text(format!("{}", d.get_fps()).as_str(), 12, 12, 20, Color::BLACK);
-        
-
     }
 }
