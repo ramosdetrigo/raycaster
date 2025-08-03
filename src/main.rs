@@ -3,10 +3,9 @@ use std::slice;
 use glam::DVec3;
 use raycaster::{
     lights::Point,
-    objects::{Cilinder, Cone, Plane, Sphere},
+    shapes::{Cilinder, Cone, Plane, Sphere},
     *,
 };
-// use raycaster;
 use raylib::prelude::*;
 
 const DIRECTIONS: [(KeyboardKey, DVec3); 6] = [
@@ -28,7 +27,7 @@ fn main() {
 
     // Criando os objetos da cena
     let mut camera = raycaster::Camera::new(DVec3::new(0.0, 0.0, 0.0), 1.6, 0.9, 0.8);
-    let ball = Sphere::new(DVec3::new(-2.0, 2.0, -16.0), 4.0, raycaster::Material::WHITE);
+    let ball = Sphere::new(DVec3::new(-2.0, 2.0, -16.0), 4.0, raycaster::Material::GREEN);
 
     let cilinder = Cilinder::new(
         DVec3::new(4.0, 4.0, -16.0),
@@ -37,7 +36,7 @@ fn main() {
         2.0,
         true,
         true,
-        raycaster::Material::WHITE,
+        raycaster::Material::BLUE,
     );
 
     let cone = Cone::new(
@@ -46,7 +45,7 @@ fn main() {
         4.0,
         2.0,
         true,
-        raycaster::Material::WHITE,
+        raycaster::Material::RED,
     );
 
     let plane = Plane::new(DVec3::new(0.0, -2.0, 0.0), DVec3::Y, raycaster::Material::WHITE);

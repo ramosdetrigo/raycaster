@@ -15,10 +15,31 @@ pub struct Material {
 
 impl Material {
     pub const WHITE: Material = Material {
-        k_amb: DVec3 { x: 1.0, y: 1.0, z: 1.0 },
-        k_dif: DVec3 { x: 1.0, y: 1.0, z: 1.0 },
-        k_esp: DVec3 { x: 1.0, y: 1.0, z: 1.0 },
-        e: 5.0,
+        k_amb: DVec3::splat(0.8),
+        k_dif: DVec3::splat(0.8),
+        k_esp: DVec3::splat(0.8),
+        e: 15.0,
+    };
+
+    pub const RED: Material = Material {
+        k_amb: DVec3::new(0.8, 0.3, 0.3),
+        k_dif: DVec3::new(0.8, 0.3, 0.3),
+        k_esp: DVec3::new(0.8, 0.3, 0.3),
+        e: 15.0,
+    };
+
+    pub const GREEN: Material = Material {
+        k_amb: DVec3::new(0.3, 0.8, 0.3),
+        k_dif: DVec3::new(0.3, 0.8, 0.3),
+        k_esp: DVec3::new(0.3, 0.8, 0.3),
+        e: 15.0,
+    };
+
+    pub const BLUE: Material = Material {
+        k_amb: DVec3::new(0.3, 0.3, 0.8),
+        k_dif: DVec3::new(0.3, 0.3, 0.8),
+        k_esp: DVec3::new(0.3, 0.3, 0.8),
+        e: 15.0,
     };
 
     pub fn new(k_amb: DVec3, k_dif: DVec3, k_esp: DVec3, e: f64) -> Material {
