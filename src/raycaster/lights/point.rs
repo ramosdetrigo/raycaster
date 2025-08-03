@@ -2,17 +2,24 @@ use glam::DVec3;
 
 use crate::{lights::Light, Intersection, Scene, Ray};
 
+/// Luz pontual definida por sua posição e sua intensidade
 pub struct Point {
+    /// Posição da luz pontual
     pub pos: DVec3,
+    /// Cor da luz
     pub color: DVec3,
+    /// Intensidade da luz
     pub intensity: f64,
 }
 
 impl Point {
+    /// Construtor da luz pontual
     pub fn new(pos: DVec3, color: DVec3, intensity: f64) -> Point {
         Point { pos, color, intensity }
     }
 
+    /// Calcula a intensidade/cor da luz em um determinado ponto de interseção numa cena
+    /// `v: vetor unitário do ponto de interseção em direção ao observador`
     pub fn color_at(&self, intersection: &Intersection, v: DVec3, scene: &Scene) -> DVec3 {
         let light_direction = (self.pos - intersection.p).normalize();
         let light_ray = Ray::new(intersection.p, light_direction);
@@ -35,7 +42,7 @@ impl Point {
             let nl = n.dot(l); // normal escalar l
             let rv = r.dot(-v); // r escalar v
 
-            // O check > 0.0 previne o bug de iluminação no "lado escuro da esfera"
+            // O check > 0.0 previne o bug de iluminação no "lado escuro" do objeto
             let mut ieye = DVec3::ZERO;
             if nl > 0.0 { ieye += mat.k_dif * nl * light_intensity; } // Reflexão difusa
             if rv > 0.0 { ieye += mat.k_esp * rv.powf(mat.e) * light_intensity; } // Reflexão especular

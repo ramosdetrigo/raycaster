@@ -26,6 +26,7 @@ fn main() {
         .build();
     // rl.set_target_fps(60);
 
+    // Criando os objetos da cena
     let mut camera = raycaster::Camera::new(DVec3::new(0.0, 0.0, 0.0), 1.6, 0.9, 0.8);
     let ball = Sphere::new(DVec3::new(-2.0, 2.0, -16.0), 4.0, raycaster::Material::WHITE);
 
@@ -57,9 +58,10 @@ fn main() {
         ambient_light: DVec3::splat(0.2),
     };
 
+    // Cria um novo canvas para desenhar a cena
     let mut canvas = Image::gen_image_color(800, 450, Color::BLACK);
     canvas.set_format(PixelFormat::PIXELFORMAT_UNCOMPRESSED_R8G8B8);
-    // Converts into GPU texture
+    // Converte numa textura da GPU
     let mut texture = rl.load_texture_from_image(&thread, &canvas).unwrap();
     let pixel_data = unsafe {
         slice::from_raw_parts_mut(
@@ -69,6 +71,7 @@ fn main() {
     };
 
     while !rl.window_should_close() {
+        // Calcula o movimento usando WASD + Shift/Espaço
         let movement: DVec3 = DIRECTIONS
             .iter()
             .filter(|(key, _)| rl.is_key_down(*key))
@@ -78,13 +81,16 @@ fn main() {
             camera.p0 += movement.normalize() * 0.1;
         }
 
-        // Updates the canvas, the rendering is done on the CPU
+        // Renderiza o frame atual no canvas na CPU
         camera.render_scene_to(&scene, &mut canvas);
+        // Atualiza a textura da GPU com os dados da imagem
         texture.update_texture(pixel_data).unwrap();
 
+        // Desenha a textura na tela
         let mut d = rl.begin_drawing(&thread);
-        d.clear_background(Color::WHITE);
+        d.clear_background(Color::BLACK);
         d.draw_texture(&texture, 0, 0, Color::WHITE);
+        // Contador de FPS
         d.draw_text(
             format!("{}", d.get_fps()).as_str(),
             10,

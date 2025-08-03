@@ -4,13 +4,18 @@ use crate::{
 };
 use glam::DVec3;
 
+/// Esfera definida pelo seu centro e seu raio.
 pub struct Sphere {
+    /// Centro da esfera
     pub pos: DVec3,
+    /// Raio da esfera
     pub radius: f64,
+    /// Material da esfera
     pub material: Material,
 }
 
 impl Sphere {
+    /// Construtor da esfera
     pub fn new(pos: DVec3, radius: f64, material: Material) -> Sphere {
         Sphere {
             pos,
@@ -19,7 +24,7 @@ impl Sphere {
         }
     }
 
-    /// Retorna a interseção de um raio com uma esfera (None se não há interseção)
+    /// Retorna a interseção mais próxima de um raio com uma esfera (None se não há interseção)
     pub fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         // resolvemos a equação do segundo grau |R(t) - C| = r
         // t²*dr•dr + 2t*dr•v + v•v - r² = 0

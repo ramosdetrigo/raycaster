@@ -2,7 +2,9 @@ use glam::DVec3;
 
 /// Raio definido pela função p = p0 + dr*t
 pub struct Ray {
+    /// Ponto 0 do raio
     pub p0: DVec3,
+    /// Direção do raio
     pub dr: DVec3,
 }
 

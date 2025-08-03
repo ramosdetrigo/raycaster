@@ -17,6 +17,7 @@ pub struct Camera {
 }
 
 impl Camera {
+    /// Construtor da câmera
     #[inline]
     #[must_use]
     pub fn new(p0: DVec3, frame_width: f64, frame_height: f64, frame_distance: f64) -> Camera {
@@ -41,6 +42,7 @@ impl Camera {
             + self.coord_system.y_axis * (self.frame_height / 2.0)
     }
 
+    /// Cria um novo canvas (struct imagem do raylib), renderiza a cena nele e o retorna.
     #[must_use]
     pub fn render_scene(&self, scene: &Scene, x_res: i32, y_res: i32) -> Image {
         let mut image = Image::gen_image_color(x_res, y_res, Color::BLACK);
@@ -49,6 +51,7 @@ impl Camera {
         image
     }
 
+    /// Desenha a cena para um canvas (struct imagem do raylib)
     pub fn render_scene_to(&self, scene: &Scene, canvas: &mut Image) {
         if canvas.format != PixelFormat::PIXELFORMAT_UNCOMPRESSED_R8G8B8 as i32 {
             panic!("Camera can only render to pixel format R8G8B8.");
@@ -68,9 +71,9 @@ impl Camera {
             slice::from_raw_parts_mut(canvas.data() as *mut u8, (res_x * res_y * 3) as usize)
         };
 
-        // Renderiza cada pixel em paralelo
+        // Renderiza cada pixel (cada trio de u8 em pixel_data)
         pixel_data
-            .par_chunks_mut(3)
+            .par_chunks_mut(3) // Renderiza em paralelo usando a biblioteca Rayon
             .enumerate()
             .for_each(|(i, pixel)| {
                 // Pixel (px,py) atual
@@ -86,7 +89,7 @@ impl Camera {
                 let closest_intersection = &scene
                     .objects
                     .iter()
-                    .filter_map(|object| object.intersects(&ray))
+                    .filter_map(|object| object.intersects(&ray)) // Só as interseções que não são "None"
                     .min_by(|intersection1, intersection2| {
                         intersection1.t.total_cmp(&intersection2.t)
                     });
@@ -95,7 +98,7 @@ impl Camera {
                 // Se não, pinta o pixel de preto.
                 let mut total_light = U8Vec3::ZERO;
                 if let Some(intersection) = closest_intersection {
-                    // Iluminação passiva - luz ambiente
+                    // Iluminação "passiva" - luz ambiente
                     let passive = scene.ambient_light * intersection.material.k_amb;
                     // Iluminação ativa - as luzes definidas do cenário
                     let active: DVec3 = scene
