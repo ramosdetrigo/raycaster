@@ -1,11 +1,15 @@
 use std::slice;
 
 use glam::DVec3;
-use raycaster::{lights::Point, objects::Sphere, *};
+use raycaster::{
+    lights::Point,
+    objects::{Cilinder, Cone, Plane, Sphere},
+    *,
+};
 // use raycaster;
 use raylib::prelude::*;
 
-const DIRECTIONS: [(KeyboardKey, DVec3);6] = [
+const DIRECTIONS: [(KeyboardKey, DVec3); 6] = [
     (KeyboardKey::KEY_W, DVec3::NEG_Z),
     (KeyboardKey::KEY_S, DVec3::Z),
     (KeyboardKey::KEY_A, DVec3::NEG_X),
@@ -23,10 +27,32 @@ fn main() {
     // rl.set_target_fps(60);
 
     let mut camera = raycaster::Camera::new(DVec3::new(0.0, 0.0, 0.0), 1.6, 0.9, 0.8);
-    let ball = Sphere::new(DVec3::new(0.0, 0.0, -16.0), 4.0, raycaster::Material::WHITE);
+    let ball = Sphere::new(DVec3::new(-2.0, 2.0, -16.0), 4.0, raycaster::Material::WHITE);
+
+    let cilinder = Cilinder::new(
+        DVec3::new(4.0, 4.0, -16.0),
+        (DVec3::X - DVec3::Z - DVec3::Y).normalize(),
+        8.0,
+        2.0,
+        true,
+        true,
+        raycaster::Material::WHITE,
+    );
+
+    let cone = Cone::new(
+        DVec3::new(-8.0, 4.0, -16.0),
+        -(DVec3::X - DVec3::Z - DVec3::Y).normalize(),
+        4.0,
+        2.0,
+        true,
+        raycaster::Material::WHITE,
+    );
+
+    let plane = Plane::new(DVec3::new(0.0, -2.0, 0.0), DVec3::Y, raycaster::Material::WHITE);
+
     let light = Point::new(DVec3::new(0.0, 6.0, -10.0), DVec3::new(1.0, 0.65, 0.7), 0.5);
     let scene = Scene {
-        objects: vec![Box::new(ball)],
+        objects: vec![Box::new(ball), Box::new(cilinder), Box::new(plane), Box::new(cone)],
         lights: vec![Box::new(light)],
         ambient_light: DVec3::splat(0.2),
     };
@@ -36,7 +62,10 @@ fn main() {
     // Converts into GPU texture
     let mut texture = rl.load_texture_from_image(&thread, &canvas).unwrap();
     let pixel_data = unsafe {
-        slice::from_raw_parts_mut(canvas.data() as *mut u8, (canvas.width * canvas.height * 3) as usize)
+        slice::from_raw_parts_mut(
+            canvas.data() as *mut u8,
+            (canvas.width * canvas.height * 3) as usize,
+        )
     };
 
     while !rl.window_should_close() {

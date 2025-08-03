@@ -33,30 +33,29 @@ impl Sphere {
         let c = oc.length_squared() - self.radius * self.radius;
         let delta = b * b - 4.0 * a * c;
 
-        if delta >= 0.0 {
-            let t1 = (-b + delta.sqrt()) / (2.0 * a);
-            let t2 = (-b - delta.sqrt()) / (2.0 * a);
-
-            // Pega o t > 0 mais próximo e constrói um struct da interseção nesse t
-            // (None se não há t > 0)
-            [t1, t2]
-                .into_iter()
-                .filter(|&t| t > 0.0)
-                .min_by(|t1, t2| t1.total_cmp(t2))
-                .map(|t| {
-                    let p = ray.at(t);
-                    let n = (p - self.pos).normalize();
-                    Intersection {
-                        t: t,
-                        p: p,
-                        normal: n,
-                        material: self.material,
-                        object: self
-                    }
-                })
-        } else {
-            None
+        if delta < 0.0 {
+            return None;
         }
+
+        // Pega o t > 0 mais próximo e constrói um struct da interseção nesse t
+        // (None se não há t > 0)
+        let t1 = (-b + delta.sqrt()) / (2.0 * a);
+        let t2 = (-b - delta.sqrt()) / (2.0 * a);
+        [t1, t2]
+            .into_iter()
+            .filter(|&t| t > 0.0)
+            .min_by(|t1, t2| t1.total_cmp(t2))
+            .map(|t| {
+                let p = ray.at(t);
+                let n = (p - self.pos).normalize();
+                Intersection {
+                    t: t,
+                    p: p,
+                    normal: n,
+                    material: self.material,
+                    object: self,
+                }
+            })
     }
 }
 
