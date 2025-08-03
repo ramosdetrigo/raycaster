@@ -1,6 +1,6 @@
 use glam::DVec3;
 
-use crate::{Intersection, Material, Ray, objects::Object};
+use crate::{Intersection, Material, Ray, shapes::Shape};
 
 /// Cilindro definido pelo centro de sua base, direção, altura e raio
 pub struct Cilinder {
@@ -155,7 +155,7 @@ impl Cilinder {
     }
 }
 
-impl Object for Cilinder {
+impl Shape for Cilinder {
     fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         self.intersects(ray)
     }

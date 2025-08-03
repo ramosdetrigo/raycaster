@@ -1,6 +1,6 @@
 use glam::DVec3;
 
-use crate::{Intersection, Material, Ray, objects::Object};
+use crate::{Intersection, Material, Ray, shapes::Shape};
 
 /// Plano definido por um ponto conhecido da superfície e sua normal
 pub struct Plane {
@@ -46,7 +46,7 @@ impl Plane {
     }
 }
 
-impl Object for Plane {
+impl Shape for Plane {
     fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         self.intersects(ray)
     }

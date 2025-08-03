@@ -10,7 +10,7 @@ pub use plane::Plane;
 pub use sphere::Sphere;
 
 /// """Classe""" 'objeto' com método que diz se um raio o intersecta ou não
-pub trait Object: Sync {
+pub trait Shape: Sync {
     /// Retorna a interseção de um raio com o objeto de t positivo mais próxima
     /// (`None` se não há colisão).
     fn intersects(&self, ray: &Ray) -> Option<Intersection>;

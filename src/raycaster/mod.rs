@@ -1,4 +1,4 @@
-pub mod objects;
+pub mod shapes;
 pub mod lights;
 
 mod camera;

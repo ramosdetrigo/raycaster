@@ -1,4 +1,4 @@
-use crate::{Intersection, Material, Ray, objects::Object};
+use crate::{Intersection, Material, Ray, shapes::Shape};
 use glam::DVec3;
 
 /// Cone definido pelo centro de sua base, direção, altura e raio da base
@@ -138,7 +138,7 @@ impl Cone {
     }
 }
 
-impl Object for Cone {
+impl Shape for Cone {
     fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         self.intersects(ray)
     }

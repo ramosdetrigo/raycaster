@@ -1,5 +1,5 @@
 use crate::raycaster::Material;
-use crate::raycaster::objects::Object;
+use crate::raycaster::shapes::Shape;
 use glam::DVec3;
 
 /// Representação de uma interseção entre um raio e um objeto
@@ -13,5 +13,5 @@ pub struct Intersection<'a> {
     /// Material no ponto de interseção
     pub material: Material,
     /// Objeto colidido
-    pub object: &'a dyn Object
+    pub object: &'a dyn Shape
 }

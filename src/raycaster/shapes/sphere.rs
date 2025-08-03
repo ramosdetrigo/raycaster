@@ -1,5 +1,5 @@
 use crate::{
-    objects::Object,
+    shapes::Shape,
     raycaster::{Intersection, Material, Ray},
 };
 use glam::DVec3;
@@ -64,7 +64,7 @@ impl Sphere {
     }
 }
 
-impl Object for Sphere {
+impl Shape for Sphere {
     fn intersects(&self, ray: &Ray) -> Option<Intersection> {
         self.intersects(ray)
     }
