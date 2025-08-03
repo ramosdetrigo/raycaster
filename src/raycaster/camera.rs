@@ -4,7 +4,7 @@ use glam::{DMat3, DVec3, U8Vec3};
 use raylib::{color::Color, ffi::PixelFormat, texture::Image};
 use rayon::prelude::*;
 
-use crate::{Ray, Scene};
+use crate::{transforms::rotation_matrix_from_axis_angle, Ray, Scene};
 
 /// Camera com observador centrado em p0, sistema de coordenadas definido,
 /// e frame de rendering
@@ -116,5 +116,13 @@ impl Camera {
                 pixel[1] = total_light.y;
                 pixel[2] = total_light.z;
             });
+    }
+
+    /// Gira a câmera ao redor de um eixo
+    pub fn rotate(&mut self, axis: DVec3, angle: f64) {
+        let rotation_matrix = rotation_matrix_from_axis_angle(axis, angle);
+        self.coord_system.x_axis = (rotation_matrix * self.coord_system.x_axis.extend(0.0)).truncate();
+        self.coord_system.y_axis = (rotation_matrix * self.coord_system.y_axis.extend(0.0)).truncate();
+        self.coord_system.z_axis = (rotation_matrix * self.coord_system.z_axis.extend(0.0)).truncate();
     }
 }

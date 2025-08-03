@@ -8,15 +8,6 @@ use raycaster::{
 };
 use raylib::prelude::*;
 
-const DIRECTIONS: [(KeyboardKey, DVec3); 6] = [
-    (KeyboardKey::KEY_W, DVec3::NEG_Z),
-    (KeyboardKey::KEY_S, DVec3::Z),
-    (KeyboardKey::KEY_A, DVec3::NEG_X),
-    (KeyboardKey::KEY_D, DVec3::X),
-    (KeyboardKey::KEY_SPACE, DVec3::Y),
-    (KeyboardKey::KEY_LEFT_SHIFT, DVec3::NEG_Y),
-];
-
 fn main() {
     let (mut rl, thread) = raylib::init()
         .size(800, 450)
@@ -71,7 +62,15 @@ fn main() {
 
     while !rl.window_should_close() {
         // Calcula o movimento usando WASD + Shift/Espaço
-        let movement: DVec3 = DIRECTIONS
+        let movement_directions = [
+            (KeyboardKey::KEY_W, -camera.coord_system.z_axis),
+            (KeyboardKey::KEY_S, camera.coord_system.z_axis),
+            (KeyboardKey::KEY_A, -camera.coord_system.x_axis),
+            (KeyboardKey::KEY_D, camera.coord_system.x_axis),
+            (KeyboardKey::KEY_SPACE, camera.coord_system.y_axis),
+            (KeyboardKey::KEY_LEFT_SHIFT, -camera.coord_system.y_axis),
+        ];
+        let movement: DVec3 = movement_directions
             .iter()
             .filter(|(key, _)| rl.is_key_down(*key))
             .map(|(_, dir)| *dir)
@@ -79,6 +78,24 @@ fn main() {
         if movement != DVec3::ZERO {
             camera.p0 += movement.normalize() * 0.1;
         }
+
+        let rotation_directions = [
+            (KeyboardKey::KEY_LEFT, DVec3::Y),
+            (KeyboardKey::KEY_RIGHT, -DVec3::Y),
+            (KeyboardKey::KEY_UP, camera.coord_system.x_axis),
+            (KeyboardKey::KEY_DOWN, -camera.coord_system.x_axis),
+            (KeyboardKey::KEY_Q, camera.coord_system.z_axis),
+            (KeyboardKey::KEY_E, -camera.coord_system.z_axis),
+        ];
+        rotation_directions
+            .iter()
+            .for_each(|(key, axis)| {
+                if rl.is_key_down(*key) {
+                    camera.rotate(*axis, 2_f64.to_radians());
+                }
+            });
+
+
 
         // Renderiza o frame atual no canvas na CPU
         camera.render_scene_to(&scene, &mut canvas);

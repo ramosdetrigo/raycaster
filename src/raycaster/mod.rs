@@ -1,5 +1,6 @@
 pub mod shapes;
 pub mod lights;
+pub mod transforms;
 
 mod camera;
 mod intersection;
