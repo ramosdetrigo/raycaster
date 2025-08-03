@@ -71,16 +71,18 @@ impl Cone {
         let t2 = (-b + delta.sqrt()) / (2.0 * a);
         [t1, t2]
             .into_iter()
-            .filter(|t| *t > 0.0)
-            .min_by(|t1, t2| t1.total_cmp(t2))
-            .and_then(|t| {
+            .filter_map(|t| {
+                if t < 0.0 {
+                    return None;
+                }
                 let p = ray.at(t);
                 let intersection_height = (p - self.cb).dot(self.dc);
                 if intersection_height < 0.0 || intersection_height > self.height {
                     return None;
                 }
-                let vertice = self.cb + self.dc*self.height;
-                let n = (p - vertice).reject_from_normalized(self.dc).normalize();
+                let vertice = self.cb + self.dc * self.height;
+                let pv = (p - vertice).normalize();
+                let n = (self.dc).reject_from_normalized(pv).normalize();
                 Some(Intersection {
                     t,
                     p,
@@ -89,6 +91,7 @@ impl Cone {
                     object: self,
                 })
             })
+            .min_by(|intersection1, intersection2| intersection1.t.total_cmp(&intersection2.t))
     }
 
     fn base_intersects(&self, ray: &Ray) -> Option<Intersection> {
