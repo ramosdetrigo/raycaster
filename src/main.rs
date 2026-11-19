@@ -14,6 +14,7 @@ fn main() {
         .title("Hello, World")
         .log_level(TraceLogLevel::LOG_NONE)
         .build();
+    // rl.set_target_fps(60);
 
     // Criando os objetos da cena
     let mut camera = raycaster::Camera::new(DVec3::new(0.0, 0.0, 0.0), 1.6, 0.9, 0.8);
